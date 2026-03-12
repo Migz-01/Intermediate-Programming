@@ -145,6 +145,7 @@ void viewAdmins(){
     cout << "\n=== ADMIN USERS ===\n";
     cout << "Gelo\n";
     cout << "Benedict\n";
+    cout << "Lee\n";
 }
 
 
