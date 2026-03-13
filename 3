@@ -1,0 +1,127 @@
+void adminMenu () {
+    
+    int choice;
+    
+    do {
+        cout << "======== ADMIN MENU ========" << endl;
+        cout << "[1] Add Account" << endl;
+        cout << "[2] View Accounts" << endl;
+        cout << "[3] Delete/Deactivate Account" << endl;
+        cout << "[4] ATM Cash Refill" << endl;
+        cout << "[5] ATM Status" << endl;
+        cout << "[6] Exit" << endl;
+        cout << "Select Choice: ";
+        cin >> choice;
+        cout << "============================" << endl;
+        
+        
+        if (choice == 1) {
+            string card, pin, bank, type;
+            double balance;
+            
+            cout << "Enter Card Number: ";
+            cin >> card;
+            
+            cout << "Enter Pin Number: ";
+            cin >> pin;
+            
+            cout << "Enter Bank: ";
+            cin >> bank;
+            
+            cout << "Enter Balance Amount: ";
+            cin >> balance;
+            
+            cout << "Enter Account Type: ";
+            cin >> type;
+            
+            addAccount(card, encodeString(pin), balance, bank, type);
+            
+            cout << "Account Added Successfully.\n";
+            
+            
+        }
+        
+        else if (choice == 2){
+            cout << "======== View Accounts ========" << endl;
+            
+            if(cardNumbers.empty()) {
+                cout << "No accounts available.\n";
+            }
+            else {
+                for(int i = 0; i < cardNumbers.size(); i++){
+                    cout << "Account " << i + 1 << endl;
+                    cout << "Card Number: " << cardNumbers[i] << endl;
+                    cout << "Bank: " << bankNames[i] << endl;
+                    cout << "Account Type: " << accountTypes[i] << endl;
+                    cout << "Balance: " << balances[i] << endl;
+                    cout << "--------------------------" << endl;
+                }
+            }
+            
+            
+        }
+        
+        else if(choice == 3){
+            string card;
+            cout << "Enter Card Number to delete/deactivate: ";
+            cin >> card;
+
+            bool found = false;
+            for(int i = 0; i < cardNumbers.size(); i++){
+                if(cardNumbers[i] == card){
+                    cardNumbers.erase(cardNumbers.begin() + i);
+                    encodedPINs.erase(encodedPINs.begin() + i);
+                    balances.erase(balances.begin() + i);
+                    userBanks.erase(userBanks.begin() + i);
+                    accountTypes.erase(accountTypes.begin() + i);
+
+                    cout << "Account deleted/deactivated successfully.\n";
+                    found = true;
+                    break;
+                }
+            }
+            if(!found) cout << "Account not found. Try another number\n";
+        }
+        
+        else if (choice == 4){
+            time_t now = time(0);
+            tm* localTime = localtime(&now);
+
+            if(localTime->tm_hour != 8 || localTime->tm_min > 15) {
+                cout << "Refill allowed only from 8:00 AM to 8:15 AM.\n";
+            }
+            else{
+                cout << "======== ATM CASH REFILL ========\n";
+                for(int i = 0; i < NUM_DENOMINATIONS; i++){
+                    int addBills;
+                    cout << "Enter number of " << denominations[i] << " Php bills to add: ";
+                    cin >> addBills;
+                    billCount[i] += addBills;
+                }
+                cout << "ATM Cash Refilled Successfully.\n";
+            }
+            
+            
+        }
+        
+        else if (choice == 5){
+            cout << "======== ATM STATUS ========\n";
+            double totalCash = 0;
+            for(int i = 0; i < NUM_DENOMINATIONS; i++){
+                cout << "Denomination: " << denominations[i] 
+                     << " | Bills: " << billCount[i] 
+                     << " | Subtotal: " << denominations[i] * billCount[i] << endl;
+                totalCash += denominations[i] * billCount[i];
+            }
+            cout << "Total Cash in ATM: PHP " << totalCash << endl;
+            
+            
+        }
+        
+        
+        
+    } while (choice != 6);
+    
+    
+
+}
